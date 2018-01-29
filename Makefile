@@ -3,70 +3,48 @@ CONFIGURATION = Debug
 DIST_PROJECTS = Jagerts.Geometry
 DIST_CMD = rm -rf $(SOLUTION_DIR)dist/; $(foreach d, $(DIST_PROJECTS), mkdir -p $(SOLUTION_DIR)dist/$d/; cp -a $(SOLUTION_DIR)$d/. $(SOLUTION_DIR)dist/$d/; rm -f $(SOLUTION_DIR)dist/$d/Makefile; rm -rf $(SOLUTION_DIR)dist/$d/obj/; )
 
+BUILD_PROJECTS = Jagerts.Geometry Jagerts.Test
+
+BUILD_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build CONFIGURATION='$(CONFIGURATION)' -f $p/Makefile; echo "";)
+REBUILD_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild CONFIGURATION='$(CONFIGURATION)' -f $p/Makefile; echo "";)
+CLEAN_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean CONFIGURATION='$(CONFIGURATION)' -f $p/Makefile; echo "";)
+
+BUILD_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build CONFIGURATION='Debug' -f $p/Makefile; echo "";)
+REBUILD_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild CONFIGURATION='Debug' -f $p/Makefile; echo "";)
+CLEAN_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean CONFIGURATION='Debug' -f $p/Makefile; echo "";)
+
+BUILD_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build CONFIGURATION='Release' -f $p/Makefile; echo "";)
+REBUILD_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild CONFIGURATION='Release' -f $p/Makefile; echo "";)
+CLEAN_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean CONFIGURATION='Release' -f $p/Makefile; echo "";)
+
 all: build
 
 build:
-	@echo ""
-	@make build CONFIGURATION='$(CONFIGURATION)' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make build CONFIGURATION='$(CONFIGURATION)' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(BUILD_CMD)
 
 rebuild:
-	@echo ""
-	@make rebuild CONFIGURATION='$(CONFIGURATION)' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make rebuild CONFIGURATION='$(CONFIGURATION)' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(REBUILD_CMD)
 
 clean:
-	@echo ""
-	@make clean CONFIGURATION='$(CONFIGURATION)' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make clean CONFIGURATION='$(CONFIGURATION)' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(CLEAN_CMD)
 
 build-debug:
-	@echo ""
-	@make build CONFIGURATION='Debug' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make build CONFIGURATION='Debug' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(BUILD_DEBUG_CMD)
 
 rebuild-debug:
-	@echo ""
-	@make rebuild CONFIGURATION='Debug' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make rebuild CONFIGURATION='Debug' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(REBUILD_DEBUG_CMD)
 
 clean-debug:
-	@echo ""
-	@make clean CONFIGURATION='Debug' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make clean CONFIGURATION='Debug' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(CLEAN_DEBUG_CMD)
 
 build-release:
-	@echo ""
-	@make build CONFIGURATION='Release' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make build CONFIGURATION='Release' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(BUILD_RELEASE_CMD)
 
 rebuild-release:
-	@echo ""
-	@make rebuild CONFIGURATION='Release' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make rebuild CONFIGURATION='Release' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(REBUILD_RELEASE_CMD)
 
 clean-release:
-	@echo ""
-	@make clean CONFIGURATION='Release' -f Jagerts.Geometry/Makefile
-	@echo ""
-	@make clean CONFIGURATION='Release' -f Jagerts.Test/Makefile
-	@echo ""
+	@$(CLEAN_RELEASE_CMD)
 
 build-all: build-debug build-release
 
