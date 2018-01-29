@@ -45,8 +45,10 @@ endif
 
 PROJECT_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 SOLUTION_DIR = $(PROJECT_DIR)../
-OUT_DIR = $(PROJECT_DIR)bin/$(OS_NAME)/$(PLATFORM_NAME)/
-INT_DIR = $(PROJECT_DIR)obj/$(OS_NAME)/$(PLATFORM_NAME)/
+BIN_DIR = bin/$(OS_NAME)/$(PLATFORM_NAME)/
+OBJ_DIR = obj/$(OS_NAME)/$(PLATFORM_NAME)/
+OUT_DIR = $(PROJECT_DIR)$(BIN_DIR)
+INT_DIR = $(PROJECT_DIR)$(OBJ_DIR)
 
 TARGET_NAME = $(shell basename $(PROJECT_DIR))
 TARGET_EXT = $(EXT_RUNTIME)
@@ -60,8 +62,8 @@ INCLUDE_FILES = $(wildcard $(INCLUDE_DIRS)*.hpp)
 SRC_FILES = $(wildcard $(PROJECT_DIR)*.cpp)
 OBJ_FILES = $(patsubst $(PROJECT_DIR)%.cpp,$(INT_DIR)%.o,$(SRC_FILES))
 
-LIB_DIRS = $(OUT_DIR)
-LIB_FILES = $(OUT_DIR)Jagerts.Geometry.a $(OUT_DIR)Jagerts.Geometry.dylib
+LIB_DIRS = $(SOLUTION_DIR)Jagerts.Geometry/$(BIN_DIR)
+LIB_FILES = $(SOLUTION_DIR)Jagerts.Geometry/$(BIN_DIR)Jagerts.Geometry.a
 
 LIB_FLAGS = $(foreach l, $(LIB_DIRS), -L$l) $(LIB_FILES) 
 

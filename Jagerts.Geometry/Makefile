@@ -47,11 +47,13 @@ JAGERTS_TEST_OUT_DIR = Jagerts.Test/bin/$(OS_NAME)/$(PLATFORM_NAME)/
 
 PROJECT_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 SOLUTION_DIR = $(PROJECT_DIR)../
-OUT_DIR = $(PROJECT_DIR)bin/$(OS_NAME)/$(PLATFORM_NAME)/
-INT_DIR = $(PROJECT_DIR)obj/$(OS_NAME)/$(PLATFORM_NAME)/
+BIN_DIR = bin/$(OS_NAME)/$(PLATFORM_NAME)/
+OBJ_DIR = obj/$(OS_NAME)/$(PLATFORM_NAME)/
+OUT_DIR = $(PROJECT_DIR)$(BIN_DIR)
+INT_DIR = $(PROJECT_DIR)$(OBJ_DIR)
 
 TARGET_NAME = $(shell basename $(PROJECT_DIR))
-TARGET_EXT = $(EXT_DLL)
+TARGET_EXT = $(EXT_LIB)
 TARGET_FILE = $(TARGET_NAME).$(TARGET_EXT)
 TARGET = $(OUT_DIR)$(TARGET_FILE)
 
@@ -93,16 +95,9 @@ $(INT_DIR)%.o: $(PROJECT_DIR)%.cpp  $(INCLUDE_FILES) | $(INT_DIR)
 compile: $(OBJ_FILES)
 	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
-	@ar cr $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB) $^ $(LIB_FLAGS)
-	@$(COMPILIER) -dynamiclib -undefined suppress -flat_namespace $(OBJ_FILES) -o $(TARGET) $(COMPILIER_FLAGS) $(LIB_FLAGS)
+	@ar cr $(TARGET) $^ $(LIB_FLAGS)
 
-copy:
-	@echo "copying binaries"
-	@mkdir -p $(JAGERTS_TEST_OUT_DIR)
-	@cp $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB) $(JAGERTS_TEST_OUT_DIR)
-	@cp $(TARGET) $(JAGERTS_TEST_OUT_DIR)
-
-$(TARGET): compile copy
+$(TARGET): compile
 
 .PHONY: clean
 
@@ -111,9 +106,6 @@ rclean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
-	@rm -f $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB)
-	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(TARGET_EXT)
-	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(EXT_LIB)
 
 clean:
 	@echo cleaning project $(TARGET_NAME)
@@ -122,6 +114,3 @@ clean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
-	@rm -f $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB)
-	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(TARGET_EXT)
-	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(EXT_LIB)
