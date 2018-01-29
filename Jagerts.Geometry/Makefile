@@ -75,6 +75,8 @@ C_PREPROCESSOR_MACROS = $(foreach m, $(PREPROCESSOR_MACROS), -D$m)
 COMPILIER = g++
 COMPILIER_FLAGS = $(INCLUDE_PARAMS) $(C_PREPROCESSOR_MACROS) -D$(OS_TARGET) -D$(PLATFORM_TARGET)
 
+all: build
+
 start:
 	@echo building project $(TARGET_NAME)
 	@echo ""
