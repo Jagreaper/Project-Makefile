@@ -76,6 +76,10 @@ COMPILIER_FLAGS = $(INCLUDE_PARAMS) $(C_PREPROCESSOR_MACROS) -D$(OS_TARGET) -D$(
 
 CPP_LANGUAGE = c++1z
 
+COPY_DIRS = $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)
+COPY_CMD = $(foreach d, $(COPY_DIRS), cp $(TARGET) $d)
+COPY_CLEAN_CMD = $(foreach d, $(COPY_DIRS), rm -f $d$(TARGET_FILE))
+
 all: build
 
 start:
@@ -101,12 +105,9 @@ compile: $(OBJ_FILES)
 	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
 	@$(COMPILIER) -shared -fPIC -o $(TARGET) $^ $(LIB_FLAGS)
+	@$(COPY_CMD)
 
-copy:
-	@mkdir -p $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)
-	@cp -f $(TARGET) $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)
-
-$(TARGET): compile copy
+$(TARGET): compile
 
 .PHONY: clean
 
@@ -115,7 +116,7 @@ rclean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
-	@rm -f $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)$(TARGET_FILE)
+	@$(COPY_CLEAN_CMD)
 
 clean:
 	@echo cleaning project $(TARGET_NAME)
@@ -124,4 +125,4 @@ clean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
-	@rm -f $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)$(TARGET_FILE)
+	@$(COPY_CLEAN_CMD)

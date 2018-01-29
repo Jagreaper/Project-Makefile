@@ -76,6 +76,10 @@ COMPILIER_FLAGS = $(INCLUDE_PARAMS) $(C_PREPROCESSOR_MACROS) -D$(OS_TARGET) -D$(
 
 CPP_LANGUAGE = c++1z
 
+COPY_DIRS = 
+COPY_CMD = $(foreach d, $(COPY_DIRS), cp $(TARGET) $d)
+COPY_CLEAN_CMD = $(foreach d, $(COPY_DIRS), rm -f $d$(TARGET_FILE))
+
 all: build
 
 start:
@@ -101,6 +105,7 @@ compile: $(OBJ_FILES)
 	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
 	@$(COMPILIER) -o $(TARGET) $^ $(COMPILIER_FLAGS) $(LIB_FLAGS)
+	@$(COPY_CMD)
 
 $(TARGET): compile
 
@@ -111,6 +116,7 @@ rclean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
+	@$(COPY_CLEAN_CMD)
 
 clean:
 	@echo cleaning project $(TARGET_NAME)
@@ -119,3 +125,4 @@ clean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
+	@$(COPY_CLEAN_CMD)
