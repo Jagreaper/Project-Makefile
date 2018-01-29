@@ -63,7 +63,7 @@ SRC_FILES = $(wildcard $(PROJECT_DIR)*.cpp)
 OBJ_FILES = $(patsubst $(PROJECT_DIR)%.cpp,$(INT_DIR)%.o,$(SRC_FILES))
 
 LIB_DIRS = $(SOLUTION_DIR)Jagerts.Geometry/$(BIN_DIR)
-LIB_FILES = $(SOLUTION_DIR)Jagerts.Geometry/$(BIN_DIR)Jagerts.Geometry.a
+LIB_FILES = $(wildcard $(LIB_DIRS)*.$(EXT_LIB))
 
 LIB_FLAGS = $(foreach l, $(LIB_DIRS), -L$l) $(LIB_FILES) 
 
