@@ -106,6 +106,7 @@ compile: $(OBJ_FILES)
 	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
 	@$(COMPILIER) -shared -fPIC -o $(TARGET) $^ $(LIB_FLAGS)
+	@$(COPY_MKDIR_CMD)
 	@$(COPY_CMD)
 
 $(TARGET): compile
