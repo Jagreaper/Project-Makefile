@@ -74,6 +74,8 @@ C_PREPROCESSOR_MACROS = $(foreach m, $(PREPROCESSOR_MACROS), -D$m)
 COMPILIER = g++
 COMPILIER_FLAGS = $(INCLUDE_PARAMS) $(C_PREPROCESSOR_MACROS) -D$(OS_TARGET) -D$(PLATFORM_TARGET) -D$(shell echo $(CONFIGURATION) | tr a-z A-Z)=1
 
+CPP_LANGUAGE = c++1z
+
 all: build
 
 start:
@@ -84,14 +86,16 @@ build: start $(TARGET)
 	@echo "success compiling binaries"	
 
 rebuild: start rclean $(TARGET)
-	@echo "success compiling binaries"	
+	@echo "success compiling binaries"
+
+sources:
+	@echo "compiling sources"		
 
 $(INT_DIR):
 	@mkdir -p $(INT_DIR)
 	
-$(INT_DIR)%.o: $(PROJECT_DIR)%.cpp  $(INCLUDE_FILES) | $(INT_DIR)
-	@echo "compiling sources"	
-	@$(COMPILIER) -c -o $@ $< $(COMPILIER_FLAGS)
+$(INT_DIR)%.o: $(PROJECT_DIR)%.cpp  $(INCLUDE_FILES) sources | $(INT_DIR)
+	@$(COMPILIER) -std=$(CPP_LANGUAGE) -c -o $@ $< $(COMPILIER_FLAGS)
 
 compile: $(OBJ_FILES)
 	@echo "compiling binaries"
