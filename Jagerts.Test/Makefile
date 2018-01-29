@@ -64,7 +64,7 @@ SRC_FILES = $(wildcard $(PROJECT_DIR)*.cpp)
 OBJ_FILES = $(patsubst $(PROJECT_DIR)%.cpp,$(INT_DIR)%.o,$(SRC_FILES))
 
 LIB_DIRS = $(OUT_DIR)
-LIB_FILES = $(foreach d, $(LIB_DIRS), $(wildcard $d*.$(EXT_DLL)))
+LIB_FILES = $(foreach f, $(foreach d, $(LIB_DIRS), $(wildcard $d*.$(EXT_DLL))), $(if $(filter-out $(TARGET), $f), $f))
 
 LIB_FLAGS = $(foreach F, $(LIB_FILES), $F) 
 
