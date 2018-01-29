@@ -64,9 +64,9 @@ SRC_FILES = $(wildcard $(PROJECT_DIR)*.cpp)
 OBJ_FILES = $(patsubst $(PROJECT_DIR)%.cpp,$(INT_DIR)%.o,$(SRC_FILES))
 
 LIB_DIRS =
-LIB_FILES = $(foreach d, $(LIB_DIRS), $(wildcard d*.$(EXT_DLL)))
+LIB_FILES = $(foreach d, $(LIB_DIRS), $(wildcard $d*.$(EXT_DLL)))
 
-LIB_FLAGS = $(foreach l, $(LIB_DIRS), -L$l) $(LIB_FILES) 
+LIB_FLAGS = $(foreach F, $(LIB_FILES), $F)
 
 PREPROCESSOR_MACROS := JAGERTS_GEOMETRY_DLL=1
 C_PREPROCESSOR_MACROS = $(foreach m, $(PREPROCESSOR_MACROS), -D$m)
@@ -100,7 +100,7 @@ $(INT_DIR)%.o: $(PROJECT_DIR)%.cpp  $(INCLUDE_FILES) sources | $(INT_DIR)
 compile: $(OBJ_FILES)
 	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
-	@$(COMPILIER) -shared -fPIC -o $(TARGET) $^
+	@$(COMPILIER) -shared -fPIC -o $(TARGET) $^ $(LIB_FLAGS)
 
 copy:
 	@mkdir -p $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)
