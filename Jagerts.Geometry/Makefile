@@ -77,8 +77,9 @@ COMPILIER_FLAGS = $(INCLUDE_PARAMS) $(C_PREPROCESSOR_MACROS) -D$(OS_TARGET) -D$(
 CPP_LANGUAGE = c++1z
 
 COPY_DIRS = $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)
-COPY_CMD = $(foreach d, $(COPY_DIRS), cp $(TARGET) $d)
-COPY_CLEAN_CMD = $(foreach d, $(COPY_DIRS), rm -f $d$(TARGET_FILE))
+COPY_CMD = $(foreach d, $(COPY_DIRS), cp $(TARGET) $d;)
+COPY_MKDIR_CMD = $(foreach d, $(COPY_DIRS), mkdir -p $d;)
+COPY_CLEAN_CMD = $(foreach d, $(COPY_DIRS), rm -f $d$(TARGET_FILE);)
 
 all: build
 
