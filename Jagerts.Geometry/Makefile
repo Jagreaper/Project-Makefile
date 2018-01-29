@@ -1,6 +1,9 @@
 ifeq ($(OS),Windows_NT)
 	OS_NAME = Windows
 	OS_TARGET = WIN32
+	EXT_RUNTIME = exe
+	EXT_DLL = dll
+	EXT_LIB = lib
     ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
         PLATFORM_TARGET = AMD64
 		PLATFORM_NAME = x64
@@ -25,6 +28,9 @@ else
     ifeq ($(UNAME_S),Darwin)
 		OS_NAME = MacOS
 		OS_TARGET = OSX
+		EXT_RUNTIME = out
+		EXT_DLL = dylib
+		EXT_LIB = a
     endif
 
 	LBITS := $(shell getconf LONG_BIT)
@@ -45,7 +51,7 @@ OUT_DIR = $(PROJECT_DIR)bin/$(OS_NAME)/$(PLATFORM_NAME)/
 INT_DIR = $(PROJECT_DIR)obj/$(OS_NAME)/$(PLATFORM_NAME)/
 
 TARGET_NAME = $(shell basename $(PROJECT_DIR))
-TARGET_EXT = dylib
+TARGET_EXT = $(EXT_DLL)
 TARGET_FILE = $(TARGET_NAME).$(TARGET_EXT)
 TARGET = $(OUT_DIR)$(TARGET_FILE)
 
@@ -64,37 +70,36 @@ LIB_FLAGS = $(foreach l, $(LIB_DIRS), -L$l) $(LIB_FILES)
 PREPROCESSOR_MACROS := JAGERTS_GEOMETRY_DLL=1
 C_PREPROCESSOR_MACROS = $(foreach m, $(PREPROCESSOR_MACROS), -D$m)
 
-CPP_LANGUAGE = c++17;
-
 COMPILIER = g++
 COMPILIER_FLAGS = $(INCLUDE_PARAMS) $(C_PREPROCESSOR_MACROS) -D$(OS_TARGET) -D$(PLATFORM_TARGET)
 
 start:
 	@echo building project $(TARGET_NAME)
+	@echo ""
 
 build: start $(TARGET)
-	@echo "  success compiling binaries"	
+	@echo "success compiling binaries"	
 
 rebuild: start rclean $(TARGET)
-	@echo "  success compiling binaries"	
+	@echo "success compiling binaries"	
 
 $(INT_DIR):
 	@mkdir -p $(INT_DIR)
 	
 $(INT_DIR)%.o: $(PROJECT_DIR)%.cpp  $(INCLUDE_FILES) | $(INT_DIR)
-	@echo "  compiling sources"	
-	@$(COMPILIER) -std=$(CPP_LANGUAGE) -c -o $@ $< $(COMPILIER_FLAGS)
+	@echo "compiling sources"	
+	@$(COMPILIER) -c -o $@ $< $(COMPILIER_FLAGS)
 
 compile: $(OBJ_FILES)
-	@echo "  compiling binaries"
+	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
-	@ar cr $(OUT_DIR)$(TARGET_NAME).a $^ $(LIB_FLAGS)
+	@ar cr $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB) $^ $(LIB_FLAGS)
 	@$(COMPILIER) -dynamiclib -undefined suppress -flat_namespace $(OBJ_FILES) -o $(TARGET) $(COMPILIER_FLAGS) $(LIB_FLAGS)
 
 copy:
-	@echo "  copying binaries"
+	@echo "copying binaries"
 	@mkdir -p $(JAGERTS_TEST_OUT_DIR)
-	@cp $(OUT_DIR)$(TARGET_NAME).a $(JAGERTS_TEST_OUT_DIR)
+	@cp $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB) $(JAGERTS_TEST_OUT_DIR)
 	@cp $(TARGET) $(JAGERTS_TEST_OUT_DIR)
 
 $(TARGET): compile copy
@@ -102,14 +107,21 @@ $(TARGET): compile copy
 .PHONY: clean
 
 rclean:
-	@echo "  cleaning object files"	
+	@echo "cleaning object files"	
 	@rm -f $(OBJ_FILES)	
-	@echo "  cleaning binary files"	
+	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
+	@rm -f $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB)
+	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(TARGET_EXT)
+	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(EXT_LIB)
 
 clean:
 	@echo cleaning project $(TARGET_NAME)
-	@echo "  cleaning object files"	
+	@echo ""
+	@echo "cleaning object files"	
 	@rm -f $(OBJ_FILES)	
-	@echo "  cleaning binary files"	
+	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
+	@rm -f $(OUT_DIR)$(TARGET_NAME).$(EXT_LIB)
+	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(TARGET_EXT)
+	@rm -f $(JAGERTS_TEST_OUT_DIR)$(TARGET_NAME).$(EXT_LIB)

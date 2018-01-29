@@ -1,6 +1,9 @@
 ifeq ($(OS),Windows_NT)
 	OS_NAME = Windows
 	OS_TARGET = WIN32
+	EXT_RUNTIME = exe
+	EXT_DLL = dll
+	EXT_LIB = lib
     ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
         PLATFORM_TARGET = AMD64
 		PLATFORM_NAME = x64
@@ -25,6 +28,9 @@ else
     ifeq ($(UNAME_S),Darwin)
 		OS_NAME = MacOS
 		OS_TARGET = OSX
+		EXT_RUNTIME = out
+		EXT_DLL = dylib
+		EXT_LIB = a
     endif
 
 	LBITS := $(shell getconf LONG_BIT)
@@ -43,7 +49,7 @@ OUT_DIR = $(PROJECT_DIR)bin/$(OS_NAME)/$(PLATFORM_NAME)/
 INT_DIR = $(PROJECT_DIR)obj/$(OS_NAME)/$(PLATFORM_NAME)/
 
 TARGET_NAME = $(shell basename $(PROJECT_DIR))
-TARGET_EXT = out
+TARGET_EXT = $(EXT_RUNTIME)
 TARGET_FILE = $(TARGET_NAME).$(TARGET_EXT)
 TARGET = $(OUT_DIR)$(TARGET_FILE)
 
@@ -62,45 +68,45 @@ LIB_FLAGS = $(foreach l, $(LIB_DIRS), -L$l) $(LIB_FILES)
 PREPROCESSOR_MACROS :=
 C_PREPROCESSOR_MACROS = $(foreach m, $(PREPROCESSOR_MACROS), -D$m)
 
-CPP_LANGUAGE = c++17;
-
 COMPILIER = g++
 COMPILIER_FLAGS = $(INCLUDE_PARAMS) $(C_PREPROCESSOR_MACROS) -D$(OS_TARGET) -D$(PLATFORM_TARGET)
 
 start:
 	@echo building project $(TARGET_NAME)
+	@echo ""
 
 build: start $(TARGET)
-	@echo "  success compiling binaries"	
+	@echo "success compiling binaries"	
 
 rebuild: start rclean $(TARGET)
-	@echo "  success compiling binaries"	
+	@echo "success compiling binaries"	
 
 $(INT_DIR):
 	@mkdir -p $(INT_DIR)
 
 $(INT_DIR)%.o: $(PROJECT_DIR)%.cpp  $(INCLUDE_FILES) | $(INT_DIR)
-	@echo "  compiling sources"	
-	@$(COMPILIER) -std=$(CPP_LANGUAGE) -c -o $@ $< $(COMPILIER_FLAGS)
+	@echo "compiling sources"	
+	@$(COMPILIER) -c -o $@ $< $(COMPILIER_FLAGS)
 
 compile: $(OBJ_FILES)
-	@echo "  compiling binaries"
+	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
-	@$(COMPILIER) -o $@ $^ $(COMPILIER_FLAGS) $(LIB_FLAGS)
+	@$(COMPILIER) -o $(TARGET) $^ $(COMPILIER_FLAGS) $(LIB_FLAGS)
 
 $(TARGET): compile
 
 .PHONY: clean
 
 rclean:
-	@echo "  cleaning object files"	
+	@echo "cleaning object files"	
 	@rm -f $(OBJ_FILES)	
-	@echo "  cleaning binary files"	
+	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
 
 clean:
 	@echo cleaning project $(TARGET_NAME)
-	@echo "  cleaning object files"	
+	@echo ""
+	@echo "cleaning object files"	
 	@rm -f $(OBJ_FILES)	
-	@echo "  cleaning binary files"	
+	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
