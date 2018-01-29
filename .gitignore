@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # VSCode
-.vscode/ 
+.vscode/
 
 # User-specific files
 *.suo
@@ -16,6 +16,7 @@
 *.userprefs
 
 # Build results
+[Dd]ist/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
