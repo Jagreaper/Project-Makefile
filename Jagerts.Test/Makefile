@@ -29,7 +29,7 @@ else
 		OS_NAME = MacOS
 		OS_TARGET = OSX
 		EXT_RUNTIME = out
-		EXT_DLL = dylib
+		EXT_DLL = so
 		EXT_LIB = a
     endif
 
@@ -63,10 +63,10 @@ INCLUDE_FILES = $(wildcard $(INCLUDE_DIRS)*.hpp)
 SRC_FILES = $(wildcard $(PROJECT_DIR)*.cpp)
 OBJ_FILES = $(patsubst $(PROJECT_DIR)%.cpp,$(INT_DIR)%.o,$(SRC_FILES))
 
-LIB_DIRS = $(SOLUTION_DIR)Jagerts.Geometry/$(BIN_DIR)
-LIB_FILES = $(wildcard $(LIB_DIRS)*.$(EXT_LIB))
+LIB_DIRS = $(OUT_DIR)
+LIB_FILES = $(foreach d, $(LIB_DIRS), $(wildcard $d*.$(EXT_DLL)))
 
-LIB_FLAGS = $(foreach l, $(LIB_DIRS), -L$l) $(LIB_FILES) 
+LIB_FLAGS = $(foreach F, $(LIB_FILES), $F) 
 
 PREPROCESSOR_MACROS :=
 C_PREPROCESSOR_MACROS = $(foreach m, $(PREPROCESSOR_MACROS), -D$m)

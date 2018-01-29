@@ -29,7 +29,7 @@ else
 		OS_NAME = MacOS
 		OS_TARGET = OSX
 		EXT_RUNTIME = out
-		EXT_DLL = dylib
+		EXT_DLL = so
 		EXT_LIB = a
     endif
 
@@ -52,7 +52,7 @@ OUT_DIR = $(PROJECT_DIR)$(BIN_DIR)
 INT_DIR = $(PROJECT_DIR)$(OBJ_DIR)
 
 TARGET_NAME = $(shell basename $(PROJECT_DIR))
-TARGET_EXT = $(EXT_LIB)
+TARGET_EXT = $(EXT_DLL)
 TARGET_FILE = $(TARGET_NAME).$(TARGET_EXT)
 TARGET = $(OUT_DIR)$(TARGET_FILE)
 
@@ -64,7 +64,7 @@ SRC_FILES = $(wildcard $(PROJECT_DIR)*.cpp)
 OBJ_FILES = $(patsubst $(PROJECT_DIR)%.cpp,$(INT_DIR)%.o,$(SRC_FILES))
 
 LIB_DIRS =
-LIB_FILES = $(wildcard $(LIB_DIRS)*.$(EXT_LIB))
+LIB_FILES = $(foreach d, $(LIB_DIRS), $(wildcard d*.$(EXT_DLL)))
 
 LIB_FLAGS = $(foreach l, $(LIB_DIRS), -L$l) $(LIB_FILES) 
 
@@ -100,9 +100,13 @@ $(INT_DIR)%.o: $(PROJECT_DIR)%.cpp  $(INCLUDE_FILES) sources | $(INT_DIR)
 compile: $(OBJ_FILES)
 	@echo "compiling binaries"
 	@mkdir -p $(OUT_DIR)
-	@ar cr $(TARGET) $^ $(LIB_FLAGS)
+	@$(COMPILIER) -shared -fPIC -o $(TARGET) $^
 
-$(TARGET): compile
+copy:
+	@mkdir -p $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)
+	@cp -f $(TARGET) $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)
+
+$(TARGET): compile copy
 
 .PHONY: clean
 
@@ -111,6 +115,7 @@ rclean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
+	@rm -f $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)$(TARGET_FILE)
 
 clean:
 	@echo cleaning project $(TARGET_NAME)
@@ -119,3 +124,4 @@ clean:
 	@rm -f $(OBJ_FILES)	
 	@echo "cleaning binary files"	
 	@rm -f $(TARGET)
+	@rm -f $(SOLUTION_DIR)Jagerts.Test/$(BIN_DIR)$(TARGET_FILE)
