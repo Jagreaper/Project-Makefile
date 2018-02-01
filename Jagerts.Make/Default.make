@@ -1,10 +1,10 @@
 ## VARIABLES ##
-_MAKE_INCLUDE_PATH = ../Jagerts.Make/
+_MAKE_INCLUDE_PATH =
 include $(_MAKE_INCLUDE_PATH)Variables-Platform.make
 include $(_MAKE_INCLUDE_PATH)Variables-Global.make
 
 ### TARGET VARIABLES ###
-TARGET_EXT = $(EXT_SHARED)
+TARGET_EXT =
 
 include $(_MAKE_INCLUDE_PATH)Variables-Target.make
 
@@ -12,7 +12,7 @@ include $(_MAKE_INCLUDE_PATH)Variables-Target.make
 INCLUDE_DIRS += 
 SRC_FILES += 
 LIB_DIRS += 
-LIB_FLAGS += $(SHARED_LIB)
+LIB_FLAGS +=
 LIB_PROJECTS = 
 
 ### LANGUAGE VARIABLES ###

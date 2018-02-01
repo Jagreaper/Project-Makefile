@@ -1,37 +1,15 @@
-CONFIGURATION = Debug
+_MAKE_INCLUDE_PATH = Jagerts.Make/
 
 DIST_PROJECTS = Jagerts.Geometry
 BUILD_PROJECTS = Jagerts.Geometry Jagerts.Test
 
-BUILD_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build CONFIGURATION='$(CONFIGURATION)' -f $p/Makefile; echo "";)
-REBUILD_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild CONFIGURATION='$(CONFIGURATION)' -f $p/Makefile; echo "";)
-CLEAN_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean CONFIGURATION='$(CONFIGURATION)' -f $p/Makefile; echo "";)
+BUILD_DEBUG_CMD = $(foreach p, $(BUILD_PROJECTS), make build-debug PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+REBUILD_DEBUG_CMD = $(foreach p, $(BUILD_PROJECTS), make rebuild-debug PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+CLEAN_DEBUG_CMD = $(foreach p, $(BUILD_PROJECTS), make clean-debug PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
 
-BUILD_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build CONFIGURATION='Debug' -f $p/Makefile; echo "";)
-REBUILD_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild CONFIGURATION='Debug' -f $p/Makefile; echo "";)
-CLEAN_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean CONFIGURATION='Debug' -f $p/Makefile; echo "";)
-
-BUILD_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build CONFIGURATION='Release' -f $p/Makefile; echo "";)
-REBUILD_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild CONFIGURATION='Release' -f $p/Makefile; echo "";)
-CLEAN_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean CONFIGURATION='Release' -f $p/Makefile; echo "";)
-
-DIST_BINS = bin/Debug/$(OS_NAME)/$(PLATFORM_NAME)/ bin/Release/$(OS_NAME)/$(PLATFORM_NAME)/
-DIST_CLEAN_CMD = rm -rf $(SOLUTION_DIR)dist/;
-DIST_MK_CMD = $(foreach p, $(DIST_PROJECTS), $(foreach d, $(DIST_BINS), mkdir -p $(SOLUTION_DIR)dist/$p/$d;))
-DIST_COPY_HEADERS_CMD = $(foreach p, $(DIST_PROJECTS), $(foreach h, $(wildcard $(SOLUTION_DIR)$p/*.hpp), cp $h $(SOLUTION_DIR)dist/$p/;))	
-DIST_COPY_BINS_CMD = $(foreach p, $(DIST_PROJECTS), $(foreach d, $(DIST_BINS), $(foreach f, $(wildcard $(SOLUTION_DIR)$p/$d$p*.*), cp $f $(SOLUTION_DIR)dist/$p/$d;)))	
-DIST_CMD = $(DIST_CLEAN_CMD) $(DIST_MK_CMD) $(DIST_COPY_HEADERS_CMD) $(DIST_COPY_BINS_CMD)
-
-all: build
-
-build:
-	@$(BUILD_CMD)
-
-rebuild:
-	@$(REBUILD_CMD)
-
-clean:
-	@$(CLEAN_CMD)
+BUILD_RELEASE_CMD = $(foreach p, $(BUILD_PROJECTS), make build-release PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+REBUILD_RELEASE_CMD = $(foreach p, $(BUILD_PROJECTS), make rebuild-release PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+CLEAN_RELEASE_CMD = $(foreach p, $(BUILD_PROJECTS), make clean-release PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
 
 build-debug:
 	@$(BUILD_DEBUG_CMD)
@@ -51,16 +29,8 @@ rebuild-release:
 clean-release:
 	@$(CLEAN_RELEASE_CMD)
 
-build-all: build-debug build-release
+build: build-debug build-release
 
-rebuild-all: rebuild-debug rebuild-release
+rebuild: rebuild-debug rebuild-release
 
-clean-all: clean-debug clean-release
-
-dist: dist-clean rebuild-all
-	@$(DIST_CMD)
-
-dist-clean:
-	@$(DIST_CLEAN_CMD)
-
-.PHONY: clean
+clean: clean-debug clean-release
