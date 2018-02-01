@@ -1,8 +1,16 @@
-DIST_CLEAN_CMD = rm -rf $(SOLUTION_DIR)dist/;
-DIST_MK_CMD = $(foreach p, $(DIST_PROJECTS), $(foreach d, $(DIST_BINS), mkdir -p $(SOLUTION_DIR)dist/$p/$d;))
-DIST_COPY_HEADERS_CMD = $(foreach p, $(DIST_PROJECTS), $(foreach h, $(wildcard $(SOLUTION_DIR)$p/*.hpp), cp $h $(SOLUTION_DIR)dist/$p/;))	
-DIST_COPY_BINS_CMD = $(foreach p, $(DIST_PROJECTS), $(foreach d, $(DIST_BINS), $(foreach f, $(wildcard $(SOLUTION_DIR)$p/$d$p*.*), cp $f $(SOLUTION_DIR)dist/$p/$d;)))	
-DIST_CMD = $(DIST_CLEAN_CMD) $(DIST_MK_CMD) $(DIST_COPY_HEADERS_CMD) $(DIST_COPY_BINS_CMD)
+.distr-clean:
+	@rm -rf $(SOLUTION_DIR)dist/$(PROJECT_NAME)/
 
-.dist-debug:
-	@rm -rf $(SOLUTION_DIR)dist/
+.distr-mk:
+	@mkdir -p $(SOLUTION_DIR)dist/$(PROJECT_NAME)/
+	@mkdir -p $(SOLUTION_DIR)dist/$(PROJECT_NAME)/$(BIN_DIR_DEBUG)
+	@mkdir -p $(SOLUTION_DIR)dist/$(PROJECT_NAME)/$(BIN_DIR_RELEASE)
+
+.distr-copy-headers:
+	@$(foreach h, $(wildcard $(PROJECT_DIR)*.hpp), cp $h $(SOLUTION_DIR)dist/$(PROJECT_NAME)/;)
+
+.distr-copy-bins:
+	@$(foreach f, $(wildcard $(PROJECT_DIR)/$(BIN_DIR_DEBUG)$(PROJECT_NAME)*.*), cp $f $(SOLUTION_DIR)dist/$(PROJECT_NAME)/$(BIN_DIR_DEBUG);)
+	@$(foreach f, $(wildcard $(PROJECT_DIR)/$(BIN_DIR_RELEASE)$(PROJECT_NAME)*.*), cp $f $(SOLUTION_DIR)dist/$(PROJECT_NAME)/$(BIN_DIR_RELEASE);)
+
+.distr-copy: .distr-mk .distr-copy-headers .distr-copy-bins

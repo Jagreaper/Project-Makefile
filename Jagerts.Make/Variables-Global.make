@@ -1,4 +1,5 @@
 PROJECT_DIR = $(CURDIR)/
+PROJECT_NAME = $(notdir $(patsubst %/, %, $(dir $(PROJECT_DIR))))
 SOLUTION_DIR = $(PROJECT_DIR)../
 
 BIN_DIR_DEBUG = bin/Debug/$(OS_NAME)/$(PLATFORM_NAME)/

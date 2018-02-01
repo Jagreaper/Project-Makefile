@@ -31,7 +31,7 @@ include $(_MAKE_INCLUDE_PATH)Rules.make
 
 clean-debug: .clean-debug-pre .clean-debug .clean-debug-post
 
-clean_release: .clean-release-pre .clean-release .clean-release-post
+clean-release: .clean-release-pre .clean-release .clean-release-post
 
 clean: clean-debug clean-release
 
@@ -56,3 +56,10 @@ rebuild-debug: clean-debug build-debug
 rebuild-release: clean-release build-release
 
 rebuild: rebuild-debug rebuild-release
+
+## DIST ##
+.distr-pre:
+
+.distr-post:
+
+distr: .distr-pre .distr-clean rebuild .distr-copy .distr-post
