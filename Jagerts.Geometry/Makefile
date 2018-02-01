@@ -36,13 +36,13 @@ clean-release: .clean-release-pre .clean-release .clean-release-post
 clean: clean-debug clean-release
 
 ## BUILD ##
-.compile-debug-pre:
+.compile-debug-pre: .clean_dependencies_debug
 
-.compile-debug-post:
+.compile-debug-post: .copy_dependencies_debug
+	
+.compile-release-pre: .clean_dependencies_release
 
-.compile-release-pre:
-
-.compile-release-post:
+.compile-release-post: .copy_dependencies_release
 
 build-debug: .compile-debug-pre .compile-debug .compile-debug-post
 

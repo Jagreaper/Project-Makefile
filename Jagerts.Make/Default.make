@@ -21,13 +21,13 @@ PREPROCESSOR_MACROS =
 include $(_MAKE_INCLUDE_PATH)Rules.make
 
 ## CLEAN ##
-.clean-debug-pre:
+.compile-debug-pre: .clean_dependencies_debug
 
-.clean-debug-post:
+.compile-debug-post: .copy_dependencies_debug
+	
+.compile-release-pre: .clean_dependencies_release
 
-.clean-release-pre:
-
-.clean-release-post:
+.compile-release-post: .copy_dependencies_release
 
 clean-debug: .clean-debug-pre .clean-debug .clean-debug-post
 
