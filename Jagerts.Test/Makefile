@@ -1,7 +1,6 @@
 ## VARIABLES ##
 _MAKE_INCLUDE_PATH = ../Jagerts.Make/
-include $(_MAKE_INCLUDE_PATH)Variables-Platform.make
-include $(_MAKE_INCLUDE_PATH)Variables-Global.make
+include $(_MAKE_INCLUDE_PATH)Variables.make
 
 ### TARGET VARIABLES ###
 TARGET_EXT = $(EXT_APP)
@@ -21,9 +20,7 @@ CPP_LANGUAGE = c++1z
 PREPROCESSOR_MACROS =
 
 ## RULES ##
-include $(_MAKE_INCLUDE_PATH)Variables-Compiler.make
-include $(_MAKE_INCLUDE_PATH)Rules-Compiler.make
-include $(_MAKE_INCLUDE_PATH)Rules-Clean.make
+include $(_MAKE_INCLUDE_PATH)Rules.make
 
 ## CLEAN ##
 .clean-debug-pre:
