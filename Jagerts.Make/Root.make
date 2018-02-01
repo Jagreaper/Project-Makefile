@@ -3,13 +3,18 @@ _MAKE_INCLUDE_PATH =
 DIST_PROJECTS =
 BUILD_PROJECTS =
 
-BUILD_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build-debug PROJECT_DIR='$(CURDIR)' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile; echo "";)
-REBUILD_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild-debug PROJECT_DIR='$(CURDIR)' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile; echo "";)
-CLEAN_DEBUG_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean-debug PROJECT_DIR='$(CURDIR)' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile; echo "";)
+BUILD_DEBUG_CMD = $(foreach p, $(BUILD_PROJECTS), make build-debug PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+REBUILD_DEBUG_CMD = $(foreach p, $(BUILD_PROJECTS), make rebuild-debug PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+CLEAN_DEBUG_CMD = $(foreach p, $(BUILD_PROJECTS), make clean-debug PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
 
-BUILD_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make build-release PROJECT_DIR='$(CURDIR)' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile; echo "";)
-REBUILD_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make rebuild-release PROJECT_DIR='$(CURDIR)' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile; echo "";)
-CLEAN_RELEASE_CMD = echo ""; $(foreach p, $(BUILD_PROJECTS), make clean-release PROJECT_DIR='$(CURDIR)' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile; echo "";)
+BUILD_RELEASE_CMD = $(foreach p, $(BUILD_PROJECTS), make build-release PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+REBUILD_RELEASE_CMD = $(foreach p, $(BUILD_PROJECTS), make rebuild-release PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+CLEAN_RELEASE_CMD = $(foreach p, $(BUILD_PROJECTS), make clean-release PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+
+DIST_CMD = $(foreach p, $(DIST_PROJECTS), make distr PROJECT_DIR='$(CURDIR)/$p/' _MAKE_INCLUDE_PATH='$(_MAKE_INCLUDE_PATH)' -f $p/Makefile;)
+
+distr:
+	@$(DIST_CMD)
 
 build-debug:
 	@$(BUILD_DEBUG_CMD)
